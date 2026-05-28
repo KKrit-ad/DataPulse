@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataPulse — KPI Analytics Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+  <!-- ═══════════════════════ UPLOAD SCREEN ═══════════════════════ -->
+  <div id="upload-screen" class="screen active">
+
+    <header class="app-header">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="8" fill="url(#logo-grad)"/>
+            <rect x="6" y="18" width="4" height="8" rx="1" fill="white" opacity=".9"/>
+            <rect x="14" y="12" width="4" height="14" rx="1" fill="white"/>
+            <rect x="22" y="6" width="4" height="20" rx="1" fill="white" opacity=".9"/>
+            <defs>
+              <linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32">
+                <stop stop-color="#6366f1"/>
+                <stop offset="1" stop-color="#8b5cf6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">DataPulse</span>
+          <span class="logo-tag">KPI Analytics</span>
+        </div>
+      </div>
+      <button class="btn-icon" id="theme-toggle" title="Toggle dark mode" onclick="toggleTheme()">
+        <span class="icon-sun">☀️</span><span class="icon-moon">🌙</span>
+      </button>
+    </header>
+
+    <main class="upload-main">
+      <div class="upload-hero">
+        <div class="hero-badge">✨ Zero setup · Runs in your browser</div>
+        <h1>Turn your spreadsheet into a<br><span class="gradient-text">live KPI dashboard</span></h1>
+        <p class="hero-sub">Upload any Excel or CSV file and get instant charts, filters, drill-downs, and metrics</p>
+      </div>
+
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" id="file-input" accept=".xlsx,.xls,.csv" hidden>
+        <div class="upload-zone-inner">
+          <div class="upload-art">
+            <div class="upload-art-bg"></div>
+            <div class="upload-art-icon">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M48 40v8a4 4 0 01-4 4H20a4 4 0 01-4-4V16a4 4 0 014-4h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M38 12l10 10H38V12z" fill="currentColor" opacity=".3"/>
+                <path d="M38 12v10h10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M32 44v-12m0 0l-4 4m4-4l4 4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="upload-copy">
+            <p class="upload-title">Drop your file here</p>
+            <p class="upload-sub">or click to browse</p>
+          </div>
+          <button class="btn-primary upload-btn" onclick="document.getElementById('file-input').click()">
+            Choose File
+          </button>
+          <p class="upload-hint">Supports .xlsx · .xls · .csv — processed entirely in your browser</p>
+        </div>
+      </div>
+
+      <!-- Sample data -->
+      <div class="sample-section">
+        <div class="sample-divider"><span>or explore a built-in sample</span></div>
+        <div class="sample-cards">
+          <button class="sample-card" onclick="loadSample('sales')">
+            <div class="sample-card-icon" style="background: linear-gradient(135deg,#10b981,#059669)">💰</div>
+            <div class="sample-card-body">
+              <strong>Sales Performance</strong>
+              <span>Revenue, products, regions, monthly trends</span>
+            </div>
+            <span class="sample-badge">1 000 rows</span>
+          </button>
+          <button class="sample-card" onclick="loadSample('employee')">
+            <div class="sample-card-icon" style="background: linear-gradient(135deg,#6366f1,#8b5cf6)">👥</div>
+            <div class="sample-card-body">
+              <strong>HR / Employee</strong>
+              <span>Salaries, departments, performance scores</span>
+            </div>
+            <span class="sample-badge">500 rows</span>
+          </button>
+          <button class="sample-card" onclick="loadSample('finance')">
+            <div class="sample-card-icon" style="background: linear-gradient(135deg,#f59e0b,#d97706)">📈</div>
+            <div class="sample-card-body">
+              <strong>Financial Budget</strong>
+              <span>Expenses, budget vs actual, variance</span>
+            </div>
+            <span class="sample-badge">360 rows</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Feature highlights -->
+      <div class="features">
+        <div class="feature"><div class="feature-icon">⚡</div><div><strong>Auto-detection</strong><br>Column types, KPIs and chart types chosen automatically</div></div>
+        <div class="feature"><div class="feature-icon">🔍</div><div><strong>Drill-down</strong><br>Click any chart element to filter all views instantly</div></div>
+        <div class="feature"><div class="feature-icon">🎛️</div><div><strong>Smart filters</strong><br>Sliders, dropdowns and date ranges — all reactive</div></div>
+        <div class="feature"><div class="feature-icon">🌙</div><div><strong>Dark mode</strong><br>Easy on the eyes, toggled with one click</div></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ══════════════════════ DASHBOARD SCREEN ══════════════════════ -->
+  <div id="dashboard-screen" class="screen">
+
+    <header class="app-header dash-header">
+      <div class="dash-header-left">
+        <button class="btn-icon" onclick="backToUpload()" title="Upload new file">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/></svg>
+        </button>
+        <div class="logo">
+          <div class="logo-icon logo-icon-sm">
+            <svg viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="url(#logo-grad2)"/><rect x="6" y="18" width="4" height="8" rx="1" fill="white" opacity=".9"/><rect x="14" y="12" width="4" height="14" rx="1" fill="white"/><rect x="22" y="6" width="4" height="20" rx="1" fill="white" opacity=".9"/><defs><linearGradient id="logo-grad2" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg>
+          </div>
+          <span class="logo-name">DataPulse</span>
+        </div>
+        <div class="divider-v"></div>
+        <div class="file-badge">
+          <span class="file-name" id="file-name">—</span>
+          <span class="file-meta" id="file-meta">—</span>
+        </div>
+      </div>
+      <div class="dash-header-right">
+        <button class="btn-outline btn-sm" onclick="exportCSV()">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          Export CSV
+        </button>
+        <button class="btn-icon" onclick="toggleTheme()" title="Toggle dark mode">
+          <span class="icon-sun">☀️</span><span class="icon-moon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Drilldown breadcrumb -->
+    <div class="breadcrumb-bar" id="breadcrumb-bar">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14" style="opacity:.6"><path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L13 10.414V15a1 1 0 01-.553.894l-4 2A1 1 0 017 17v-6.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd"/></svg>
+      <span class="bc-label">Drill-down:</span>
+      <div class="bc-chips" id="bc-chips"></div>
+      <button class="bc-clear" onclick="clearDrilldowns()">✕ Clear all</button>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar" id="filter-bar">
+      <div class="filter-scroll" id="filter-controls"></div>
+      <button class="btn-ghost btn-sm" onclick="resetFilters()">↺ Reset</button>
+    </div>
+
+    <main class="dash-main" id="dash-main">
+
+      <!-- KPI Cards -->
+      <section class="kpi-section">
+        <div class="section-hdr">
+          <h2 class="section-title">Key Metrics</h2>
+          <button class="btn-ghost btn-sm" onclick="toggleCustomize()">⚙ Customize</button>
+        </div>
+        <div class="customize-panel" id="customize-panel">
+          <p class="customize-hint">Show / hide metric cards:</p>
+          <div class="customize-checks" id="customize-checks"></div>
+        </div>
+        <div class="kpi-row" id="kpi-cards"></div>
+      </section>
+
+      <!-- Charts -->
+      <section class="charts-section">
+        <div class="section-hdr">
+          <h2 class="section-title">Analytics</h2>
+          <span class="section-hint">Click any chart element to drill down</span>
+        </div>
+        <div class="charts-grid" id="charts-grid"></div>
+      </section>
+
+      <!-- Data Table -->
+      <section class="table-section">
+        <div class="section-hdr">
+          <h2 class="section-title">Data Table</h2>
+          <div class="table-toolbar">
+            <div class="search-wrap">
+              <svg class="search-icon" viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+              <input type="text" class="search-input" id="table-search" placeholder="Search all columns…" oninput="onTableSearch()">
+            </div>
+            <select class="select-sm" id="page-size" onchange="onPageSize()">
+              <option value="10">10 rows</option>
+              <option value="25" selected>25 rows</option>
+              <option value="50">50 rows</option>
+              <option value="100">100 rows</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="data-table">
+            <thead id="table-head"></thead>
+            <tbody id="table-body"></tbody>
+          </table>
+          <div class="table-empty" id="table-empty" style="display:none">
+            <div class="table-empty-icon">🔍</div>
+            <p>No records match the current filters</p>
+            <button class="btn-outline btn-sm" onclick="resetFilters();clearDrilldowns()">Clear all filters</button>
+          </div>
+        </div>
+        <div class="table-footer">
+          <span class="table-info" id="table-info"></span>
+          <div class="pagination" id="pagination"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Loading overlay -->
+  <div class="loading-overlay" id="loading">
+    <div class="loading-box">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Analyzing your data…</p>
+      <p class="loading-sub" id="loading-sub">Detecting column types</p>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="vendor/xlsx.min.js"></script>
+  <script src="vendor/chart.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
